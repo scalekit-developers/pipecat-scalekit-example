@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pipecat Cloud × Scalekit — sequence</title>
+  <style>
+    :root {
+      --bg: #111114;
+      --card: #1c1c22;
+      --line: #3a3a44;
+      --text: #f4f4f5;
+      --muted: #a1a1aa;
+      --user: #7dd3fc;
+      --pipe: #a78bfa;
+      --sk: #34d399;
+      --gcal: #fbbf24;
+      --no: #fb7185;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 16px/1.45 ui-sans-serif, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px 16px 48px;
+    }
+    main { max-width: 880px; margin: 0 auto; }
+    h1 { font-size: 1.35rem; font-weight: 650; margin: 0 0 8px; }
+    p { color: var(--muted); margin: 0 0 24px; }
+    .legend {
+      display: flex; flex-wrap: wrap; gap: 10px 16px;
+      margin-bottom: 20px; font-size: 0.85rem; color: var(--muted);
+    }
+    .legend span::before {
+      content: ""; display: inline-block; width: 10px; height: 10px;
+      border-radius: 99px; margin-right: 6px; vertical-align: middle;
+    }
+    .l-user::before { background: var(--user); }
+    .l-pipe::before { background: var(--pipe); }
+    .l-sk::before { background: var(--sk); }
+    .l-gcal::before { background: var(--gcal); }
+    .steps { display: grid; gap: 10px; }
+    .step {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: grid;
+      grid-template-columns: 2.2rem 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+    .n {
+      font-weight: 700;
+      color: var(--bg);
+      background: var(--pipe);
+      width: 1.7rem; height: 1.7rem;
+      border-radius: 99px;
+      display: grid; place-items: center;
+      font-size: 0.8rem;
+    }
+    .step b { color: var(--text); }
+    .who { font-size: 0.75rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+    .arrow { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
+    .no {
+      margin-top: 20px;
+      border: 1px dashed var(--no);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: var(--muted);
+    }
+    .no strong { color: var(--no); }
+    @media (max-width: 640px) {
+      body { padding: 16px 12px 40px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>You speak. Pipecat Cloud talks. Scalekit reads Calendar.</h1>
+    <p>The model never sees a Google token. The browser never sees a Scalekit secret.</p>
+    <div class="legend">
+      <span class="l-user">You</span>
+      <span class="l-pipe">Pipecat Cloud</span>
+      <span class="l-sk">Scalekit</span>
+      <span class="l-gcal">Google Calendar</span>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div>
+        <div class="who">You → Pipecat Cloud</div>
+        <b>Open the Cloud client. Click Connect. Say “What’s on my calendar today?”</b>
+        <div class="arrow">Audio goes to Daily WebRTC inside Pipecat Cloud. Not localhost.</div>
+      </div></div>
+      <div class="step"><div class="n">2</div><div>
+        <div class="who">Pipecat Cloud</div>
+        <b>Speech-to-text turns your voice into text.</b>
+        <div class="arrow">Deepgram (or another cloud STT). Local Whisper is gone.</div>
+      </div></div>
+      <div class="step"><div class="n">3</div><div>
+        <div class="who">Pipecat Cloud → LLM</div>
+        <b>The language model sees the text and the tool name only.</b>
+        <div class="arrow">It may call <code>googlecalendar_list_events</code>. It does not receive a token.</div>
+      </div></div>
+      <div class="step"><div class="n">4</div><div>
+        <div class="who">Pipecat Cloud → Scalekit</div>
+        <b>Our bot calls <code>execute_tool</code> as <code>TEST_IDENTIFIER</code>.</b>
+        <div class="arrow">Same contract as Vapi and LiveKit. Secrets stay in the Cloud secret set.</div>
+      </div></div>
+      <div class="step"><div class="n">5</div><div>
+        <div class="who">Scalekit → Google</div>
+        <b>Scalekit uses the stored Google connection. Google returns events.</b>
+        <div class="arrow">OAuth lives in Scalekit. Not in Pipecat. Not in the LLM.</div>
+      </div></div>
+      <div class="step"><div class="n">6</div><div>
+        <div class="who">Pipecat Cloud → You</div>
+        <b>The model writes a short spoken answer. Text-to-speech plays it.</b>
+        <div class="arrow">You hear the meetings. End of turn.</div>
+      </div></div>
+    </div>
+    <div class="no">
+      <strong>Never on this path:</strong> Google password, OAuth token, Scalekit client secret in the browser, Pipecat OSS localhost:7860.
+    </div>
+  </main>
+</body>
+</html>

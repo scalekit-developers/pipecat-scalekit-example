@@ -1,0 +1,27 @@
+[project]
+name = "pipecat-x-sample"
+version = "0.1.0"
+description = "Local Pipecat voice agent that calls Google Calendar through Scalekit AgentKit."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pipecat-ai[webrtc,daily,silero,deepgram,openai,cartesia,runner,whisper,mlx-whisper,kokoro]>=0.0.95",
+    "python-dotenv>=1.0.0",
+    "scalekit-sdk-python>=2.0.0",
+    "loguru>=0.7.0",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.0.0"]
+
+[tool.uv]
+package = false
+default-groups = ["dev"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+filterwarnings = [
+    "ignore::DeprecationWarning:scalekit",
+    "ignore::DeprecationWarning:pydantic",
+]

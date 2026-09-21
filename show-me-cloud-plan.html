@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cloud implementation plan</title>
+  <style>
+    :root { --bg:#111114; --card:#1c1c22; --line:#3a3a44; --t:#f4f4f5; --m:#a1a1aa; --you:#7dd3fc; --me:#a78bfa; --ok:#34d399; --no:#fb7185; }
+    * { box-sizing: border-box; }
+    body { margin:0; font:16px/1.45 ui-sans-serif, system-ui, sans-serif; background:var(--bg); color:var(--t); padding:24px 16px 48px; }
+    main { max-width:820px; margin:0 auto; }
+    h1 { font-size:1.3rem; margin:0 0 6px; }
+    .lede { color:var(--m); margin:0 0 20px; }
+    h2 { font-size:0.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--m); margin:28px 0 10px; }
+    .row { display:grid; gap:8px; }
+    .step { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 14px; }
+    .who { font-size:0.72rem; letter-spacing:.06em; text-transform:uppercase; margin-bottom:4px; }
+    .you { color:var(--you); }
+    .me { color:var(--me); }
+    .ok { color:var(--ok); }
+    code { font-size:0.85em; }
+    .split { display:grid; gap:10px; }
+    @media (min-width:640px) { .split { grid-template-columns:1fr 1fr; } }
+    .no { border:1px dashed var(--no); border-radius:12px; padding:12px 14px; color:var(--m); margin-top:20px; }
+    .no strong { color:var(--no); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Pipecat Cloud × Scalekit — plan</h1>
+    <p class="lede">Review only. No code until you say go. No localhost. You speak in Cloud Sandbox. Scalekit reads your calendar. The model never sees a token.</p>
+
+    <h2>Call flow</h2>
+    <div class="row">
+      <div class="step"><span class="who you">You</span> Cloud Sandbox → Connect → “What’s on my calendar today?”</div>
+      <div class="step"><span class="who">Pipecat Cloud</span> Daily WebRTC → Deepgram (speech to text) → LLM (text + tool name only)</div>
+      <div class="step"><span class="who">Our bot</span> <code>execute_tool</code> as <code>TEST_IDENTIFIER</code> → Scalekit → Google Calendar</div>
+      <div class="step"><span class="who">Pipecat Cloud</span> Strip tokens → spoken answer → Cartesia → you hear events</div>
+    </div>
+
+    <h2>Work split</h2>
+    <div class="split">
+      <div class="step"><span class="who you">You first</span> Cloud org. <code>pipecat cloud auth login</code>. Deepgram + Cartesia keys. Paste values into secret set <code>scalekit-calendar-secrets</code>.</div>
+      <div class="step"><span class="who me">Me after go</span> Edit <code>bot.py</code>. Add <code>Dockerfile</code> + <code>pcc-deploy.toml</code>. Keep <code>scalekit_calendar.py</code>. Tests stay green. I do not upload secrets. I do not deploy until you say deploy.</div>
+    </div>
+
+    <h2>Keep</h2>
+    <div class="step"><span class="who ok">Already works</span> Scalekit calendar wrapper + unit tests. Google connection Active. Same Vapi/LiveKit identity contract. One tool: <code>googlecalendar_list_events</code>.</div>
+
+    <div class="no"><strong>Not in this plan:</strong> OSS runner, Whisper, Kokoro, Nina email, Pipecat org PR, tutorial agent.</div>
+  </main>
+</body>
+</html>
