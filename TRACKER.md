@@ -5,7 +5,7 @@ This file stays in sync with [SK-1162](https://linear.app/scalekit/issue/SK-1162
 After any session that changes status or next step:
 1. Write it here.
 2. Patch SK-1162 the same way (description Next + one comment).
-3. Do not ping Nina.
+3. Resume state lives in `WIP.md`, not here.
 
 **Last synced:** 2026-09-21
 
@@ -24,12 +24,7 @@ Live clone: `/Users/saif/Projects/pipecat-scalekit-example`. Git branch: `protot
 
 ## Next (same text as SK-1162)
 
-Tamil emailed Nina on 15 Sep (HEY 2092027009).
-Offer: Saif builds a Pipecat voice-agent sample with Scalekit auth/tool-calling. They only review it. Optional social.
-
-Nina has not replied. Do not ping.
-
-Demo is **Pipecat OSS** on the laptop (`http://localhost:7860/client`). Local WebRTC. Deepgram + Cartesia required. Scalekit is AgentKit only (`execute_tool` as `CONNECTED_ACCOUNT_ID`). Real OpenAI key for the LLM. Status stays Todo until a developer hears **their** calendar on localhost.
+Demo is **Pipecat OSS** on the laptop (`http://localhost:7860/client`). Local WebRTC. Deepgram + Cartesia required. Scalekit is AgentKit only (`execute_tool` as `CONNECTED_ACCOUNT_ID`). Real OpenAI key for the LLM. Resume in `WIP.md`. Status stays Todo until a developer hears **their** calendar on localhost.
 
 ## Linear comments (newest first)
 
