@@ -2,7 +2,7 @@
 
 Other Scalekit samples use `TEST_IDENTIFIER`. This sample uses `CONNECTED_ACCOUNT_ID` so a new developer sees that the value is **their** connected account.
 
-Code today still says `TEST_IDENTIFIER`. After go, we rename. No fallback alias.
+The env name is `CONNECTED_ACCOUNT_ID`. No `TEST_IDENTIFIER` fallback.
 
 Moving the repo to `scalekit-developers` is not this trail. The repo stays private until we hear calendar.
 
