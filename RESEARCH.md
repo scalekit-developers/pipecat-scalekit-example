@@ -1,5 +1,7 @@
 # Pipecat × Scalekit — primary-source research
 
+Language and lock for this sample: [`CONTEXT.md`](CONTEXT.md) and `docs/adr/`. This research predates that lock.
+
 Researched: 2026-09-20. Local proof only. No code changes. No servers started.
 
 Every claim below cites an official URL. If a page is JS-rendered, the same schema is cited from Scalekit’s published connector source that feeds that page.

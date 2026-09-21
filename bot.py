@@ -1,6 +1,6 @@
 """Pipecat voice bot that lists Google Calendar through Scalekit.
 
-The LLM never sees an OAuth token. Scalekit execute_tool runs as TEST_IDENTIFIER.
+The LLM never sees an OAuth token. Scalekit execute_tool runs as CONNECTED_ACCOUNT_ID.
 """
 
 from __future__ import annotations
@@ -30,6 +30,7 @@ from pipecat.transports.websocket.fastapi import FastAPIWebsocketParams
 from pipecat.workers.runner import WorkerRunner
 
 from scalekit_calendar import list_calendar_events
+from speech_keys import require_speech_keys
 
 load_dotenv(override=True)
 
@@ -53,7 +54,7 @@ def _llm_service() -> OpenAILLMService:
     if not openai_key:
         raise RuntimeError("Missing OPENAI_API_KEY.")
     base_url = _env("OPENAI_BASE_URL") or None
-    model = _env("OPENAI_MODEL") or ("claude-haiku-4-5" if base_url else "gpt-4o-mini")
+    model = _env("OPENAI_MODEL") or "gpt-4o-mini"
     settings = OpenAILLMService.Settings(
         model=model,
         system_instruction=(
@@ -71,42 +72,19 @@ def _llm_service() -> OpenAILLMService:
 
 
 def _speech_services():
-    """Cloud speech when keys exist. Else local Whisper + Kokoro."""
-    deepgram_key = _env("DEEPGRAM_API_KEY")
-    cartesia_key = _env("CARTESIA_API_KEY")
-    openai_key = _env("OPENAI_API_KEY")
-    openai_base = _env("OPENAI_BASE_URL")
+    """Deepgram STT and Cartesia TTS. Both keys are required."""
+    deepgram_key, cartesia_key = require_speech_keys()
+    from pipecat.services.cartesia.tts import CartesiaTTSService
+    from pipecat.services.deepgram.stt import DeepgramSTTService
 
-    if deepgram_key and cartesia_key:
-        from pipecat.services.cartesia.tts import CartesiaTTSService
-        from pipecat.services.deepgram.stt import DeepgramSTTService
-
-        stt = DeepgramSTTService(api_key=deepgram_key)
-        tts = CartesiaTTSService(
-            api_key=cartesia_key,
-            settings=CartesiaTTSService.Settings(
-                voice=_env("CARTESIA_VOICE_ID") or "71a7ad14-091c-4e8e-a314-022ece01c121",
-            ),
-        )
-        logger.info("Speech: Deepgram STT + Cartesia TTS")
-        return stt, tts
-
-    # Real OpenAI speech only. A Scalekit LLM gateway key cannot do Whisper/TTS.
-    if openai_key and not openai_base:
-        from pipecat.services.openai.stt import OpenAISTTService
-        from pipecat.services.openai.tts import OpenAITTSService
-
-        stt = OpenAISTTService(api_key=openai_key)
-        tts = OpenAITTSService(api_key=openai_key)
-        logger.info("Speech: OpenAI STT + OpenAI TTS")
-        return stt, tts
-
-    from pipecat.services.kokoro.tts import KokoroTTSService
-    from pipecat.services.whisper.stt import WhisperSTTServiceMLX
-
-    stt = WhisperSTTServiceMLX()
-    tts = KokoroTTSService()
-    logger.info("Speech: local Whisper STT + Kokoro TTS")
+    stt = DeepgramSTTService(api_key=deepgram_key)
+    tts = CartesiaTTSService(
+        api_key=cartesia_key,
+        settings=CartesiaTTSService.Settings(
+            voice=_env("CARTESIA_VOICE_ID") or "71a7ad14-091c-4e8e-a314-022ece01c121",
+        ),
+    )
+    logger.info("Speech: Deepgram STT + Cartesia TTS")
     return stt, tts
 
 
@@ -130,7 +108,7 @@ async def googlecalendar_list_events(
     """
     result = await asyncio.to_thread(
         list_calendar_events,
-        identifier=_env("TEST_IDENTIFIER"),
+        identifier=_env("CONNECTED_ACCOUNT_ID"),
         connection_name=_env("SCALEKIT_CONNECTION_NAME") or "googlecalendar",
         calendar_id=calendar_id,
         time_min=time_min,

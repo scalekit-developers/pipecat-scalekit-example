@@ -44,7 +44,7 @@ def _execute_calendar() -> dict:
             "time_max": end.isoformat().replace("+00:00", "Z"),
         },
         tool_name="googlecalendar_list_events",
-        identifier=_env("TEST_IDENTIFIER"),
+        identifier=_env("CONNECTED_ACCOUNT_ID"),
         connection_name=_env("SCALEKIT_CONNECTION_NAME") or "googlecalendar",
     )
     data = response.data if hasattr(response, "data") else response
@@ -54,7 +54,7 @@ def _execute_calendar() -> dict:
 def _chat(messages: list[dict], tools: list[dict] | None = None) -> dict:
     key = _env("OPENAI_API_KEY")
     base = (_env("OPENAI_BASE_URL") or "https://api.openai.com/v1").rstrip("/")
-    model = _env("OPENAI_MODEL") or "claude-haiku-4-5"
+    model = _env("OPENAI_MODEL") or "gpt-4o-mini"
     body: dict = {"model": model, "messages": messages, "max_tokens": 400}
     if tools:
         body["tools"] = tools

@@ -1,125 +1,78 @@
-# Implementation plan — Pipecat Cloud × Scalekit
+# Implementation plan — Pipecat OSS × Scalekit
 
-Status: **review only**. No code until you say go. No deploy until you say deploy.
+Status: **locked**. Code and docs match CONTEXT.md. Do not start `bot.py` until a human says start.
 
-Demo is **Pipecat Cloud only**. No `localhost:7860`. No Whisper. No Kokoro.
+Demo is **Pipecat OSS on this laptop**. No Pipecat Cloud. No Cloud card. No Dockerfile.
 
 ## Goal
 
-A reviewer opens a Pipecat Cloud Sandbox URL, clicks Connect, and says “What’s on my calendar today?”
+A developer clones this repo, substitutes **their** credentials, opens http://localhost:7860/client, and hears **their** Google Calendar.
 
-Pipecat Cloud is the voice host (Daily WebRTC is included).
-Scalekit AgentKit lists **that user’s** Google Calendar.
+Pipecat OSS is the voice host (local WebRTC).
+Scalekit AgentKit lists that developer's Google Calendar.
 The language model never sees an OAuth token.
-
-Same identity contract as the Vapi and LiveKit demos.
 
 ## Runtime sequence
 
-1. You open the Cloud dashboard → agent → Sandbox. Click Connect. Speak.
-2. Pipecat Cloud (Daily WebRTC) receives audio.
+1. Developer runs `uv run bot.py`. Opens http://localhost:7860/client. Clicks Connect. Speaks.
+2. Local WebRTC receives audio. No Daily key. No Cloud session.
 3. Deepgram turns speech into text.
 4. The LLM sees text + the tool name `googlecalendar_list_events` only.
-5. `bot.py` calls `scalekit_calendar.list_calendar_events` → `execute_tool` as `TEST_IDENTIFIER`.
+5. `bot.py` calls `scalekit_calendar.list_calendar_events` → `execute_tool` as `CONNECTED_ACCOUNT_ID`.
 6. Scalekit uses the stored Google connection. Google returns events.
 7. Token fields are stripped. The LLM writes a short spoken answer.
 8. Cartesia plays the answer.
 
-Daily room URL and token are created by Pipecat Cloud. We do not sign up for Daily separately.
-
-## Keep (already proven)
+## Keep
 
 | Piece | Why |
 | -- | -- |
-| `scalekit_calendar.py` | `execute_tool` as `TEST_IDENTIFIER` + `SCALEKIT_CONNECTION_NAME`. Tokens stripped. Unit tests pass. |
-| `tests/test_scalekit_calendar.py` | Mocked Scalekit. Keep green. |
-| `smoke_calendar.py` | Optional laptop check of Scalekit only. Not the demo. |
-| Scalekit Dashboard connection | Google Calendar Active for `TEST_IDENTIFIER`. Already listed events. |
+| `bot.py` | Local runner + WebRTC. Deepgram + Cartesia required. |
+| `scalekit_calendar.py` | `execute_tool` as `CONNECTED_ACCOUNT_ID` + `SCALEKIT_CONNECTION_NAME`. Tokens stripped. |
+| `speech_keys.py` | Fails with Deepgram and Cartesia signup URLs if keys are missing. |
+| `tests/test_scalekit_calendar.py` | Mocked Scalekit. Identifier env is `CONNECTED_ACCOUNT_ID`. |
+| `tests/test_speech_keys.py` | Speech-key helper. |
+| `smoke_calendar.py` | Laptop check of Scalekit only. No microphone. |
+| `pyproject.toml` | `runner`, `webrtc`, `silero`, `deepgram`, `openai`, `cartesia`. No Whisper or Kokoro. |
+| `RUN.md` | Local start + http://localhost:7860/client |
 
-## Change
+Do not add `Dockerfile` or `pcc-deploy.toml`. Do not commit `.env`.
 
-| File | Change |
+## Env (names only)
+
+| Name | Role |
 | -- | -- |
-| `bot.py` | Require Deepgram + Cartesia. Delete Whisper/Kokoro/OpenAI-speech fallback. Keep Daily transport. Drop local `webrtc` as the demo path. |
-| `pyproject.toml` | Drop `whisper`, `mlx-whisper`, `kokoro`, `runner` extras. Keep `daily`, `silero`, `deepgram`, `openai`, `cartesia`. |
-| `Dockerfile` | **New.** `FROM dailyco/pipecat-base:latest`. Copy `bot.py` + `scalekit_calendar.py`. `uv sync --no-dev`. No `CMD` (base image runs `bot.py`). |
-| `pcc-deploy.toml` | **New.** `agent_name = "scalekit-calendar"`. `secret_set = "scalekit-calendar-secrets"`. `[scaling] min_agents = 1`. |
-| `.dockerignore` | **New.** Exclude `.env`, `.venv`, tests, markdown, `.agent-status`. |
-| `.env.example` | Names only. No values. |
-| `README.md` / `RUN.md` | Cloud Sandbox URL. Delete localhost instructions. |
-
-Do not commit `.env`. Do not put secrets in git.
-
-## Secrets (you hold the values)
-
-The agent writes **names**. You put **values** in Pipecat Cloud.
-
-Secret set name: `scalekit-calendar-secrets`
-
-| Name | Who has it |
-| -- | -- |
-| `SCALEKIT_ENV_URL` | Already in local gitignored `.env` |
-| `SCALEKIT_CLIENT_ID` | Same |
-| `SCALEKIT_CLIENT_SECRET` | Same |
-| `TEST_IDENTIFIER` | Same (`saif.shaik@scalekit.com`) |
+| `SCALEKIT_ENV_URL` | AgentKit environment |
+| `SCALEKIT_CLIENT_ID` | Client id |
+| `SCALEKIT_CLIENT_SECRET` | Client secret |
+| `CONNECTED_ACCOUNT_ID` | Developer's connected-account identifier |
 | `SCALEKIT_CONNECTION_NAME` | `googlecalendar` |
-| `OPENAI_API_KEY` | Scalekit LLM gateway key |
-| `OPENAI_BASE_URL` | `https://llm.scalekit.cloud/v1` |
-| `OPENAI_MODEL` | `claude-haiku-4-5` |
-| `DEEPGRAM_API_KEY` | **You must obtain** |
-| `CARTESIA_API_KEY` | **You must obtain** |
+| `OPENAI_API_KEY` | Real OpenAI key |
+| `OPENAI_MODEL` | `gpt-4o-mini` |
+| `DEEPGRAM_API_KEY` | Required |
+| `CARTESIA_API_KEY` | Required |
 
-You set them in the Cloud dashboard, or you run:
-
-```bash
-pipecat cloud secrets set scalekit-calendar-secrets --file .env
-```
-
-I do not run that command. I do not read `.env` into chat.
-
-1Password (`op://…` + `op run`) is for a laptop process. Cloud uses the secret set. Same idea: the agent never pastes values.
-
-## You vs me
-
-**You**
-
-1. Create / join a Pipecat Cloud org. [Introduction](https://docs.pipecat.ai/pipecat-cloud/introduction)
-2. `uv tool install "pipecat-ai[cli]" --with pipecatcloud`
-3. `pipecat cloud auth login` (browser Allow)
-4. Get Deepgram + Cartesia keys (or name a different cloud STT/TTS)
-5. Paste secret values into the Cloud secret set (or run `secrets set` yourself)
-6. After deploy: dashboard → agent `scalekit-calendar` → Sandbox → Allow mic → Connect
-7. Say “What’s on my calendar today?”
-
-**Me (after you say go)**
-
-1. Edit `bot.py` and `pyproject.toml` as above
-2. Add `Dockerfile`, `pcc-deploy.toml`, `.dockerignore`
-3. Keep unit tests green
-4. Rewrite `README.md` / `RUN.md` for Cloud
-5. Stop. Show you the diff.
-
-**Me (after you say deploy)**
-
-1. `pipecat cloud deploy` from `ecosystem/pipecat-x-sample`
-2. Confirm the agent is listed
-3. You click Sandbox
+Do not document `OPENAI_BASE_URL`. Code may still honor it if set.
 
 ## Out of scope
 
-- Local OSS runner as the demo
+- Pipecat Cloud deploy, card, Sandbox
+- Whisper / Kokoro as a second speech path
+- Documenting `llm.scalekit.cloud`
 - Pipecat org GitHub PR
 - Email Nina / Slack
-- Tutorial agent (later, after Cloud works)
 - Extra tools beyond `googlecalendar_list_events`
+- Moving the repo to `scalekit-developers`
 
 ## Done when
 
-A human (you) hears calendar events from the Cloud Sandbox. SK-1162 stays Todo until that happens. Then we can spawn the tutorial agent.
+A developer hears **their** calendar events at http://localhost:7860/client.
 
 ## Docs
 
-- Deploy: https://docs.pipecat.ai/pipecat-cloud/guides/cloud-builds
-- Secrets: https://docs.pipecat.ai/pipecat-cloud/fundamentals/secrets
-- Daily WebRTC: https://docs.pipecat.ai/pipecat-cloud/guides/daily-webrtc
-- Agent images: https://docs.pipecat.ai/pipecat-cloud/fundamentals/agent-images
+- Local runner: https://docs.pipecat.ai/pipecat/deployment/running-bots-locally
+- Quickstart: https://docs.pipecat.ai/pipecat/get-started/quickstart
+- Function calling: https://docs.pipecat.ai/guides/learn/function-calling
+- Scalekit tools: https://docs.scalekit.com/agentkit/tools/scalekit-optimized-tools
+- Google Calendar connector: https://docs.scalekit.com/agentkit/connectors/googlecalendar/
+- Connections: https://docs.scalekit.com/agentkit/connections

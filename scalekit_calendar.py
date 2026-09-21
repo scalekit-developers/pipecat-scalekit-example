@@ -96,10 +96,10 @@ def list_calendar_events(
     time_max: str = "",
     max_results: int = 10,
 ) -> dict:
-    identifier = identifier if identifier is not None else _env("TEST_IDENTIFIER")
+    identifier = identifier if identifier is not None else _env("CONNECTED_ACCOUNT_ID")
     connection_name = connection_name or _env("SCALEKIT_CONNECTION_NAME") or "googlecalendar"
     if not identifier:
-        return {"error": "TEST_IDENTIFIER is not set"}
+        return {"error": "CONNECTED_ACCOUNT_ID is not set"}
 
     tool_input: dict[str, Any] = {
         "calendar_id": calendar_id or "primary",

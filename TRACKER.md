@@ -9,7 +9,7 @@ After any session that changes status or next step:
 
 **Last synced:** 2026-09-21
 
-Git branch: `sk-1162-pipecat-cloud-prototype` (pushed). Entire trail: **not created yet** — `entire trail create` needs a github.com origin and the saif-shines login. Create it in the Entire UI or after we fix origin.
+Live clone: `/Users/saif/Projects/pipecat-scalekit-example`. Git branch: `prototype`. Entire trail: [trail 1](https://entire.io/gh/saif-shines/pipecat-scalekit-example/trails/1).
 
 ## Linear (source of truth for status)
 
@@ -29,10 +29,12 @@ Offer: Saif builds a Pipecat voice-agent sample with Scalekit auth/tool-calling.
 
 Nina has not replied. Do not ping.
 
-Demo is **Pipecat Cloud only**. Do not use the local OSS runner (`localhost:7860`). Keep Scalekit `execute_tool` as `TEST_IDENTIFIER`. Status stays Todo until someone hears calendar events on a Cloud URL.
+Demo is **Pipecat OSS** on the laptop (`http://localhost:7860/client`). Local WebRTC. Deepgram + Cartesia required. Scalekit is AgentKit only (`execute_tool` as `CONNECTED_ACCOUNT_ID`). Real OpenAI key for the LLM. Status stays Todo until a developer hears **their** calendar on localhost.
 
 ## Linear comments (newest first)
 
+- **21 Sep** — Grill lock: AgentKit only, `CONNECTED_ACCOUNT_ID`, Deepgram+Cartesia required, real OpenAI key in README. Docs + code on `prototype`. Do not start bot. Do not ping Nina.
+- **21 Sep** — Switched demo to Pipecat OSS (local WebRTC). Cloud dropped: no signup credits, PCC-1004. Trail 1 on `prototype`. Do not ping Nina.
 - **21 Sep** — Branch `sk-1162-pipecat-cloud-prototype` pushed. Trail create blocked (origin is github-personal, not github.com). Cloud only. Do not ping Nina.
 - **20 Sep** — email scan. Tamil emailed Nina 15 Sep. Nina silent. Do not ping.
 - **2 Sep** — Tamil will follow up. Low.
@@ -41,16 +43,17 @@ Demo is **Pipecat Cloud only**. Do not use the local OSS runner (`localhost:7860
 
 | File | State |
 | -- | -- |
-| `bot.py` | Pipecat 1.11 runner + `googlecalendar_list_events`. Voice server not started by the implementer. |
-| `scalekit_calendar.py` | Unit-tested wrapper. `execute_tool` as `TEST_IDENTIFIER`. Tokens stripped. |
-| `pyproject.toml` | `uv sync` done. Pipecat 1.11.0. |
-| `.env` | Present (gitignored). |
-| `tests/test_scalekit_calendar.py` | 5 unit tests, mocked Scalekit. |
+| `bot.py` | Pipecat runner + `googlecalendar_list_events`. Deepgram + Cartesia required. Voice server not started by the implementer. |
+| `scalekit_calendar.py` | Unit-tested wrapper. `execute_tool` as `CONNECTED_ACCOUNT_ID`. Tokens stripped. |
+| `speech_keys.py` | Public helper. Missing keys name Deepgram and Cartesia signups. |
+| `pyproject.toml` | No whisper / mlx-whisper / kokoro extras. |
+| `.env.example` | Names only. No `OPENAI_BASE_URL`. |
+| `tests/` | Calendar seams + speech-key helper. |
 | `RUN.md` | Start command and http://localhost:7860/client |
-| Run | User starts `uv run bot.py`. |
+| Run | Developer starts `uv run bot.py`. |
 
 Copy: VAPI / LiveKit identity contract. One tool: `googlecalendar_list_events`.
-Python: `client.actions.execute_tool(..., identifier=TEST_IDENTIFIER, connection_name=SCALEKIT_CONNECTION_NAME)`.
+Python: `client.actions.execute_tool(..., identifier=CONNECTED_ACCOUNT_ID, connection_name=SCALEKIT_CONNECTION_NAME)`.
 Pipecat: [07-function-calling.py](https://github.com/pipecat-ai/pipecat/blob/main/examples/getting-started/07-function-calling.py)
 
 ## Rules
@@ -59,3 +62,4 @@ Pipecat: [07-function-calling.py](https://github.com/pipecat-ai/pipecat/blob/mai
 - Do not post Slack.
 - Do not open a Pipecat org PR until they ask.
 - LLM never sees an OAuth token.
+- Do not document `llm.scalekit.cloud`.
