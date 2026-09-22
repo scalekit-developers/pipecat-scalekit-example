@@ -2,6 +2,8 @@
 
 A starter other developers clone. Put **your** credentials in `.env` and hear **your** Google Calendar.
 
+Watch the demo: https://screen.studio/share/86SdvaHM
+
 This sample is [Pipecat OSS](https://docs.pipecat.ai/pipecat/get-started/quickstart) on a laptop. Scalekit is **AgentKit only**: a connection, a connected account, and `execute_tool`. Scalekit is not the language model.
 
 ```
