@@ -94,3 +94,37 @@ def test_list_calendar_events_returns_error_dict_not_raise():
     )
     assert result == {"error": "connection not found"}
     assert "token" not in result
+
+
+def test_list_calendar_events_errors_when_connected_account_id_missing(monkeypatch):
+    monkeypatch.delenv("CONNECTED_ACCOUNT_ID", raising=False)
+    monkeypatch.delenv("TEST_IDENTIFIER", raising=False)
+
+    import scalekit_calendar as sc
+
+    result = sc.list_calendar_events(client=MagicMock())
+    assert "error" in result
+    assert "CONNECTED_ACCOUNT_ID" in result["error"]
+    assert "TEST_IDENTIFIER" not in result["error"]
+
+
+def test_list_calendar_events_uses_connected_account_id_from_env(monkeypatch):
+    monkeypatch.setenv("CONNECTED_ACCOUNT_ID", "dev@example.com")
+
+    import scalekit_calendar as sc
+
+    client = MagicMock()
+    client.actions.execute_tool.return_value = MagicMock(data={"events": []})
+    result = sc.list_calendar_events(client=client, connection_name="googlecalendar")
+    assert client.actions.execute_tool.call_args.kwargs["identifier"] == "dev@example.com"
+    assert result == {"events": []}
+
+
+def test_list_calendar_events_does_not_fall_back_to_test_identifier(monkeypatch):
+    monkeypatch.delenv("CONNECTED_ACCOUNT_ID", raising=False)
+    monkeypatch.setenv("TEST_IDENTIFIER", "old@example.com")
+
+    import scalekit_calendar as sc
+
+    result = sc.list_calendar_events(client=MagicMock())
+    assert result == {"error": "CONNECTED_ACCOUNT_ID is not set"}

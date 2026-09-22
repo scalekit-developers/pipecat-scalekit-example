@@ -5,3 +5,8 @@ __pycache__/
 .DS_Store
 uv.lock
 .pytest_cache/
+
+# Local tool files. Not part of the starter.
+notes/
+.grok/
+.entire/

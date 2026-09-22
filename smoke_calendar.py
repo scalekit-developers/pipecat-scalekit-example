@@ -1,6 +1,6 @@
 """Prove Scalekit googlecalendar_list_events without the voice stack.
 
-The LLM never sees a token. This script calls execute_tool as TEST_IDENTIFIER.
+The LLM never sees a token. This script calls execute_tool as CONNECTED_ACCOUNT_ID.
 """
 
 from __future__ import annotations
@@ -28,7 +28,7 @@ def main() -> int:
     env_url = _env("SCALEKIT_ENV_URL", "SCALEKIT_ENVIRONMENT_URL")
     client_id = _env("SCALEKIT_CLIENT_ID")
     client_secret = _env("SCALEKIT_CLIENT_SECRET")
-    identifier = _env("TEST_IDENTIFIER")
+    identifier = _env("CONNECTED_ACCOUNT_ID")
     connection_name = _env("SCALEKIT_CONNECTION_NAME") or "googlecalendar"
 
     missing = [
@@ -37,7 +37,7 @@ def main() -> int:
             ("SCALEKIT_ENV_URL", env_url),
             ("SCALEKIT_CLIENT_ID", client_id),
             ("SCALEKIT_CLIENT_SECRET", client_secret),
-            ("TEST_IDENTIFIER", identifier),
+            ("CONNECTED_ACCOUNT_ID", identifier),
         ]
         if not value
     ]

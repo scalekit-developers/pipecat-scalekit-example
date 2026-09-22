@@ -5,7 +5,7 @@ description = "Local Pipecat voice agent that calls Google Calendar through Scal
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "pipecat-ai[webrtc,daily,silero,deepgram,openai,cartesia,runner,whisper,mlx-whisper,kokoro]>=0.0.95",
+    "pipecat-ai[webrtc,daily,silero,deepgram,openai,cartesia,runner]>=0.0.95",
     "python-dotenv>=1.0.0",
     "scalekit-sdk-python>=2.0.0",
     "loguru>=0.7.0",
