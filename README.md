@@ -1,6 +1,6 @@
 # Pipecat × Scalekit calendar sample
 
-A starter other developers clone. Put **your** credentials in `.env` and hear **your** Google Calendar.
+> A Pipecat voice bot that reads your Google Calendar through Scalekit AgentKit.
 
 Watch the demo: https://screen.studio/share/86SdvaHM
 
@@ -22,6 +22,17 @@ Google Calendar (your connected account)
 - The browser never sees a Scalekit secret.
 - The LLM never sees an OAuth token.
 - `execute_tool` runs as `CONNECTED_ACCOUNT_ID`.
+
+## Quickstart
+
+One-time setup (accounts + dashboard config) is below. Once `.env` is filled:
+
+```bash
+uv sync
+uv run bot.py
+```
+
+Open http://localhost:7860/client. Allow the microphone. Click **Connect**. Say "What's on my calendar today?" — the bot lists **your** calendar.
 
 ## You need
 
@@ -45,24 +56,16 @@ Copy `SCALEKIT_ENV_URL`, `SCALEKIT_CLIENT_ID`, and `SCALEKIT_CLIENT_SECRET` from
 
 See [Configure a connection](https://docs.scalekit.com/agentkit/connections) and [Google Calendar connector](https://docs.scalekit.com/agentkit/connectors/googlecalendar/).
 
-## Run
+## Setup
 
 ```bash
 cp .env.example .env
 # fill .env with your values
 uv sync
 uv run pytest
-uv run bot.py
 ```
 
-Open http://localhost:7860/client. Allow the microphone. Click **Connect**. Say:
-
-- "What's on my calendar today?"
-- "Do I have meetings this week?"
-
-The bot lists **your** calendar.
-
-If speech keys are missing, the process exits with an error that includes the Deepgram and Cartesia signup URLs.
+Then run the Quickstart commands above. If speech keys are missing, the process exits with an error that includes the Deepgram and Cartesia signup URLs.
 
 ## Env names
 
