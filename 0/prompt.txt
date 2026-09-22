@@ -1,0 +1,30 @@
+can you run this demo locally again, I want to test
+
+---
+
+stop the local serer
+
+---
+
+can you add this to agents.md and commit and put 
+
+<pasted_content id="252e">
+
+The snippet *is* the description. Prose only exists to name the next line of code.
+
+## Hide planning without deleting it
+
+- `docs/plan/`, `TODO.md`, `ROADMAP.md` → gitignore the scratch ones, or keep them but **do not** mention them in README
+- GitHub: Settings → General → uncheck “Releases / Packages / Deployments” you don’t use so the right rail isn’t noise
+- Pin nothing that says “planning”
+- `CONTRIBUTING.md` can exist; README gets one word: `Contributing` as a link, no preview of the process
+
+## What to tell an agent (drop in `AGENTS.md`)
+
+```markdown
+## Public docs
+- README.md is the only human landing page. Keep it under ~80 lines.
+- Every claim in README must be followed by the code that proves it.
+- Never add roadmap, status tables, or "next up" to README.
+- Planning lives in docs/plan/ or the issue tracker. Do not link those from README.
+</pasted_content id="252e">

@@ -1,0 +1,84 @@
+{
+  "cli_version": "0.10.6",
+  "checkpoint_id": "01M345N8W5Y7F8VWCDW2CTAXF9",
+  "session_id": "b25dec06-40f8-4e71-8cb4-27c02bd5c824",
+  "strategy": "manual-commit",
+  "created_at": "2026-09-22T09:03:00.703195Z",
+  "branch": "prototype",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "AGENTS.md"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5",
+  "turn_id": "d58403620d33",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 46,
+    "cache_creation_tokens": 65341,
+    "cache_read_tokens": 2040540,
+    "output_tokens": 4480,
+    "api_call_count": 23
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_0193M3zx2Q7ZFcwVzooqjViK",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "run"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "d58403620d33",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 88,
+        "end": 89,
+        "entry_ids": [
+          "b1683341-a933-4424-9cc4-a059df4dc67e"
+        ],
+        "tool_use_id": "toolu_0193M3zx2Q7ZFcwVzooqjViK"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_0193M3zx2Q7ZFcwVzooqjViK"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: run",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-09-22T09:03:00.659188Z",
+    "agent_lines": 6,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 6,
+    "total_lines_changed": 6,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 90,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/settings.json": 90
+      }
+    }
+  ]
+}
