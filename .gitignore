@@ -5,3 +5,6 @@ __pycache__/
 .DS_Store
 uv.lock
 .pytest_cache/
+
+# Local trail notes. Not part of the starter.
+notes/

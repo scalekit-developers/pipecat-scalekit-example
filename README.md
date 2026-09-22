@@ -86,7 +86,6 @@ Do not commit `.env`.
 
 ## Docs
 
-- [Run locally](RUN.md)
 - [Pipecat local runner](https://docs.pipecat.ai/pipecat/deployment/running-bots-locally)
 - [Pipecat quickstart](https://docs.pipecat.ai/pipecat/get-started/quickstart)
 - [Scalekit execute_tool](https://docs.scalekit.com/agentkit/tools/scalekit-optimized-tools)
