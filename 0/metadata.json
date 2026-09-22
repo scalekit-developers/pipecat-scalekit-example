@@ -1,0 +1,116 @@
+{
+  "cli_version": "0.10.6",
+  "checkpoint_id": "01M346WQ7RCABPGXFHFGWTWK7W",
+  "session_id": "b25dec06-40f8-4e71-8cb4-27c02bd5c824",
+  "strategy": "manual-commit",
+  "created_at": "2026-09-22T09:24:33.430023Z",
+  "branch": "docs/public-docs-rules",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "README.md"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5",
+  "turn_id": "47d9000b52da",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 124,
+    "cache_creation_tokens": 119007,
+    "cache_read_tokens": 6708656,
+    "output_tokens": 21701,
+    "api_call_count": 62
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_0193M3zx2Q7ZFcwVzooqjViK",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "run"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "47d9000b52da",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 88,
+        "end": 89,
+        "entry_ids": [
+          "b1683341-a933-4424-9cc4-a059df4dc67e"
+        ],
+        "tool_use_id": "toolu_0193M3zx2Q7ZFcwVzooqjViK"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_0193M3zx2Q7ZFcwVzooqjViK"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: run",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01CfsP48DH2rEsvXo3gAsC9S",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "devrel-dx-craft"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "47d9000b52da",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 350,
+        "end": 351,
+        "entry_ids": [
+          "541ead2c-69c9-4063-8ef4-132f6e42fa3b"
+        ],
+        "tool_use_id": "toolu_01CfsP48DH2rEsvXo3gAsC9S"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01CfsP48DH2rEsvXo3gAsC9S"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: devrel-dx-craft",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 1
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-09-22T09:24:33.370563Z",
+    "agent_lines": 14,
+    "agent_removed": 11,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 14,
+    "total_lines_changed": 25,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 97,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/settings.json": 90,
+        ".claude/settings.local.json": 7
+      }
+    }
+  ]
+}

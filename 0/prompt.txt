@@ -1,0 +1,25 @@
+/ask-saif how ot clean up this repo for public for smooth dev ex in navigating
+
+---
+
+no.
+
+---
+
+can you run it on this repo
+
+---
+
+can you use this skill 
+
+<pasted_content id="252e">
+https://github.com/the-open-agent/oss-skills/blob/master/skills/readme-that-converts/SKILL.md
+</pasted_content id="252e">
+
+---
+
+contnue
+
+---
+
+this is part of entire trail 2
