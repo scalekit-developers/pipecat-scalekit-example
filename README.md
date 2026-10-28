@@ -6,7 +6,7 @@ Watch the demo: https://screen.studio/share/86SdvaHM
 
 This sample is [Pipecat OSS](https://docs.pipecat.ai/pipecat/get-started/quickstart) on a laptop. Scalekit is **AgentKit only**: a connection, a connected account, and `execute_tool`. Scalekit is not the language model.
 
-Scalekit provides auth and actions on behalf of users, with 500+ connectors and 20,000+ tools.
+Scalekit provides auth and actions on behalf of users, with 600+ connectors and 35,000+ tools.
 
 ```
 Developer (browser at http://localhost:7860/client)
